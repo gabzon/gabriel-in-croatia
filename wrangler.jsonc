@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "my-astro-app",
+	"name": "gabriel-in-croatia",
 	"main": "./dist/_worker.js/index.js",
 	"compatibility_date": "2025-07-10",
 	"compatibility_flags": [
