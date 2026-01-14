@@ -1,0 +1,19 @@
+---
+import { categoryConfig, type CategoryKey } from '../config/site';
+
+interface Props {
+  category: CategoryKey;
+  size?: 'sm' | 'md';
+}
+
+const { category, size = 'sm' } = Astro.props;
+const config = categoryConfig[category];
+
+const sizeClasses = size === 'sm'
+  ? 'px-2 py-0.5 text-[10px]'
+  : 'px-3 py-1 text-xs';
+---
+
+<span class={`${config.bgColor} ${config.textColor} ${sizeClasses} font-bold uppercase tracking-wider rounded-full`}>
+  {config.label}
+</span>

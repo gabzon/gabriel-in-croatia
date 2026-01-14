@@ -1,0 +1,124 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Font imports */
+@import "@fontsource/plus-jakarta-sans/300.css";
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/plus-jakarta-sans/800.css";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/playfair-display/900.css";
+
+/* Design System Theme */
+@theme {
+  /* Colors */
+  --color-primary: #FF1700;
+  --color-primary-hover: #DC2626;
+  --color-background: #F8F7F6;
+  --color-background-dark: #1A1310;
+  --color-cream: #FDFBF7;
+  --color-text: #1B140D;
+  --color-text-muted: #9A704C;
+  --color-border: #F3EDE7;
+  --color-border-dark: #3D2E24;
+
+  /* Category accent colors */
+  --color-category-latino: #FF1700;
+  --color-category-adventure: #3B82F6;
+  --color-category-language: #EAB308;
+  --color-category-stories: #10B981;
+  --color-teal: #2B6777;
+
+  /* Fonts */
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-display);
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  /* Drop cap styling */
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 5rem;
+    line-height: 0.8;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    color: var(--color-primary);
+    font-family: var(--font-serif);
+    font-weight: 900;
+  }
+
+  /* Handwritten quote style */
+  .handwritten {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+}
+
+/* Component utilities */
+@layer components {
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 10px 25px -5px rgb(255 23 0 / 0.2);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background-color: white;
+    border: 1px solid var(--color-border);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-cream);
+  }
+}
+
+/* Typography plugin customization */
+@layer base {
+  .prose {
+    --tw-prose-body: var(--color-text);
+    --tw-prose-headings: var(--color-text);
+    --tw-prose-links: var(--color-primary);
+    --tw-prose-bold: var(--color-text);
+    --tw-prose-quotes: var(--color-text);
+    --tw-prose-quote-borders: var(--color-primary);
+  }
+
+  .prose blockquote {
+    border-left-width: 4px;
+    border-color: var(--color-primary);
+    background-color: rgb(255 23 0 / 0.05);
+    padding: 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+  }
+
+  .prose blockquote p {
+    margin: 0;
+  }
+}

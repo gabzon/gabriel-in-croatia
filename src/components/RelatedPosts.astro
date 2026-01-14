@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { categoryConfig } from '../config/site';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <div>
+    <h5 class="font-extrabold text-xs uppercase tracking-widest text-text-muted mb-4">
+      Related Epiphanies
+    </h5>
+    <div class="space-y-4">
+      {posts.slice(0, 3).map((post) => (
+        <a href={`/blog/${post.slug}`} class="group block">
+          <div class="flex gap-4">
+            {post.data.heroImage && (
+              <div
+                class="w-16 h-16 rounded-lg bg-cover bg-center shrink-0"
+                style={`background-image: url('${post.data.heroImage}')`}
+              />
+            )}
+            <div>
+              <p class={`text-xs font-bold uppercase ${categoryConfig[post.data.category].textColor}`}>
+                {categoryConfig[post.data.category].label}
+              </p>
+              <h6 class="text-sm font-bold leading-tight group-hover:text-primary transition-colors">
+                {post.data.title}
+              </h6>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}

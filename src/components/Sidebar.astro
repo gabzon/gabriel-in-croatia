@@ -1,0 +1,131 @@
+---
+import { Image } from 'astro:assets';
+import { siteConfig } from '../config/site';
+import { Thermometer, Battery, MapPin } from 'lucide-astro';
+import { authorAvatar } from '../images';
+
+interface Props {
+  showStatus?: boolean;
+  showNewsletter?: boolean;
+}
+
+const { showStatus = true, showNewsletter = true } = Astro.props;
+const { author, status } = siteConfig;
+---
+
+<aside class="space-y-8">
+  <!-- Bio Card -->
+  <div class="bg-white p-8 rounded-3xl border border-border shadow-sm">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-primary/20 bg-gray-200">
+        <Image
+          src={authorAvatar}
+          alt={author.name}
+          width={80}
+          height={80}
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div>
+        <h3 class="text-2xl font-extrabold">Hola / Bok!</h3>
+        <p class="text-gray-500">I'm {author.name}.</p>
+      </div>
+    </div>
+    <p class="text-gray-600 mb-6 leading-relaxed">{author.bio}</p>
+
+    <!-- Current Mood -->
+    <div class="bg-background p-4 rounded-2xl mb-6">
+      <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">
+        Current Mood
+      </span>
+      <div class="flex items-center gap-3">
+        <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+        <span class="font-medium italic">"{status.mood}"</span>
+      </div>
+    </div>
+
+    {showNewsletter && (
+      <div class="bg-primary p-6 rounded-2xl text-white shadow-lg shadow-primary/20">
+        <h4 class="text-xl font-extrabold mb-2">Join the Confusion</h4>
+        <p class="text-sm text-white/80 mb-4">
+          Weekly updates on my latest cultural fails, straight to your inbox.
+        </p>
+        <form class="space-y-3">
+          <input
+            type="email"
+            placeholder="Your email..."
+            class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 placeholder:text-white/70 text-white focus:ring-white focus:border-white transition-all outline-none"
+          />
+          <button
+            type="submit"
+            class="w-full bg-white text-primary font-extrabold py-3 rounded-lg hover:bg-gray-50 transition-colors uppercase text-sm tracking-wider"
+          >
+            Let's Get Confused
+          </button>
+        </form>
+      </div>
+    )}
+  </div>
+
+  {showStatus && (
+    <!-- Status Widget -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-border">
+      <h5 class="font-extrabold text-xs uppercase tracking-widest text-primary mb-4">
+        Current Status
+      </h5>
+      <div class="space-y-6">
+        <!-- Confusion Level -->
+        <div>
+          <div class="flex justify-between text-sm font-bold mb-2">
+            <span>Confusion Level</span>
+            <span class="text-primary">{status.confusionLevel}%</span>
+          </div>
+          <div class="w-full bg-border h-2 rounded-full overflow-hidden">
+            <div
+              class="bg-primary h-full rounded-full transition-all"
+              style={`width: ${status.confusionLevel}%`}
+            ></div>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <Thermometer class="w-5 h-5" />
+          </div>
+          <div>
+            <p class="text-xs font-bold text-gray-400">Temperature</p>
+            <p class="text-sm font-bold">{status.temperature}</p>
+          </div>
+        </div>
+
+        <!-- Social Battery -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-teal/10 flex items-center justify-center text-teal">
+            <Battery class="w-5 h-5" />
+          </div>
+          <div>
+            <p class="text-xs font-bold text-gray-400">Social Battery</p>
+            <p class="text-sm font-bold">{status.socialBattery}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Widget -->
+    <div class="bg-teal text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+      <div class="relative z-10">
+        <h5 class="font-extrabold text-xs uppercase tracking-widest text-white/70 mb-4">
+          Location
+        </h5>
+        <p class="text-2xl font-serif font-bold">{status.location.city}, {status.location.country}</p>
+        <p class="text-sm text-white/80 mt-1">{status.location.region}</p>
+        <div class="mt-6 flex items-center gap-2">
+          <MapPin class="w-4 h-4" />
+          <span class="text-xs font-bold">Dalmatian Coast</span>
+        </div>
+      </div>
+      <MapPin class="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
+    </div>
+  )}
+</aside>

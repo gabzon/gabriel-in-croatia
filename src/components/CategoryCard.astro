@@ -1,0 +1,37 @@
+---
+import { ArrowLeftRight, Compass, Languages, BookOpen } from 'lucide-astro';
+import { categoryConfig, type CategoryKey } from '../config/site';
+
+interface Props {
+  category: CategoryKey;
+}
+
+const { category } = Astro.props;
+const config = categoryConfig[category];
+
+const icons = {
+  'latino-vs-slavic': ArrowLeftRight,
+  'adventure': Compass,
+  'language': Languages,
+  'hidden-stories': BookOpen,
+};
+
+const Icon = icons[category];
+
+const colorClasses = {
+  'latino-vs-slavic': 'bg-primary/5 hover:bg-primary border-primary/10 text-primary',
+  'adventure': 'bg-blue-500/5 hover:bg-blue-500 border-blue-500/10 text-blue-500',
+  'language': 'bg-yellow-500/5 hover:bg-yellow-500 border-yellow-500/10 text-yellow-500',
+  'hidden-stories': 'bg-emerald-500/5 hover:bg-emerald-500 border-emerald-500/10 text-emerald-500',
+};
+---
+
+<a
+  href={`/blog?category=${category}`}
+  class={`group p-6 rounded-2xl text-center flex flex-col items-center justify-center border transition-colors ${colorClasses[category]}`}
+>
+  <Icon class="w-10 h-10 mb-4 group-hover:text-white transition-colors" />
+  <h4 class="font-extrabold text-sm group-hover:text-white uppercase tracking-wider transition-colors">
+    {config.label}
+  </h4>
+</a>

@@ -1,0 +1,172 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import ConfusionRating from '../components/ConfusionRating.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
+import { siteConfig, categoryConfig } from '../config/site';
+import { ChevronRight, Thermometer, Battery, MapPin } from 'lucide-astro';
+import { authorAvatar } from '../images';
+
+type Props = CollectionEntry<'blog'>['data'] & {
+  slug: string;
+};
+
+const { title, description, pubDate, updatedDate, heroImage, caption, category, confusionLevel, slug } = Astro.props;
+
+// Calculate reading time
+const wordCount = Astro.slots.has('default') ? 1000 : 500; // Estimate
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+// Get related posts (same category, excluding current)
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((post) => post.data.category === category && post.slug !== slug && !post.data.draft)
+  .slice(0, 3);
+
+const { status } = siteConfig;
+---
+
+<BaseLayout title={title} description={description} heroImage={heroImage}>
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8 md:py-12">
+    <!-- Breadcrumbs -->
+    <nav class="flex flex-wrap items-center gap-2 mb-8">
+      <a href="/" class="text-text-muted text-sm font-medium hover:text-primary">Home</a>
+      <ChevronRight class="w-4 h-4 text-text-muted" />
+      <a href={`/blog?category=${category}`} class="text-text-muted text-sm font-medium hover:text-primary">
+        {categoryConfig[category].label}
+      </a>
+      <ChevronRight class="w-4 h-4 text-text-muted" />
+      <span class="text-text text-sm font-bold truncate max-w-[200px]">{title}</span>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="mb-10">
+      <div class="flex items-center gap-2 mb-6">
+        <CategoryBadge category={category} size="md" />
+        <span class="text-text-muted text-sm">• {readingTime} min read</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-serif font-black leading-tight tracking-tight mb-6">
+        {title}
+      </h1>
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary bg-gray-200">
+          <Image
+            src={authorAvatar}
+            alt={siteConfig.author.name}
+            width={48}
+            height={48}
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p class="font-bold">{siteConfig.author.name}</p>
+          <p class="text-text-muted text-sm">
+            Published on {pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {updatedDate && (
+              <span> • Updated {updatedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            )}
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Image -->
+    {heroImage && (
+      <div class="mb-16">
+        <div class="relative group">
+          <div class="w-full rounded-xl overflow-hidden shadow-2xl">
+            <img
+              src={heroImage}
+              alt={title}
+              class="w-full h-auto min-h-[300px] max-h-[500px] object-cover"
+            />
+          </div>
+          {caption && (
+            <div class="absolute -bottom-6 -right-2 md:right-8 bg-white p-4 shadow-xl rounded-lg border-l-4 border-primary max-w-xs rotate-2">
+              <p class="handwritten text-sm">{caption}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <div class="flex flex-col lg:flex-row gap-12">
+      <!-- Content -->
+      <article class="flex-1 max-w-3xl">
+        <div class="prose prose-lg max-w-none">
+          <slot />
+        </div>
+
+        <!-- Confusion Rating -->
+        <div class="mt-12 pt-8 border-t border-border">
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-gray-500">Confusion Level:</span>
+            <ConfusionRating level={confusionLevel} size="md" />
+            <span class="text-sm text-gray-400">({confusionLevel}/5)</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="w-full lg:w-80 space-y-8">
+        <!-- Status Widget -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-border">
+          <h5 class="font-extrabold text-xs uppercase tracking-widest text-primary mb-4">
+            Current Status
+          </h5>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-sm font-bold mb-2">
+                <span>Confusion Level</span>
+                <span class="text-primary">{status.confusionLevel}%</span>
+              </div>
+              <div class="w-full bg-border h-2 rounded-full overflow-hidden">
+                <div class="bg-primary h-full rounded-full" style={`width: ${status.confusionLevel}%`}></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <Thermometer class="w-5 h-5" />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400">Temperature</p>
+                <p class="text-sm font-bold">{status.temperature}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-teal/10 flex items-center justify-center text-teal">
+                <Battery class="w-5 h-5" />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-gray-400">Social Battery</p>
+                <p class="text-sm font-bold">{status.socialBattery}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Widget -->
+        <div class="bg-teal text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="relative z-10">
+            <h5 class="font-extrabold text-xs uppercase tracking-widest text-white/70 mb-4">
+              Location
+            </h5>
+            <p class="text-2xl font-serif font-bold">{status.location.city}, {status.location.country}</p>
+            <p class="text-sm text-white/80 mt-1">{status.location.region}</p>
+            <div class="mt-6 flex items-center gap-2">
+              <MapPin class="w-4 h-4" />
+              <span class="text-xs font-bold">Open in Maps</span>
+            </div>
+          </div>
+          <MapPin class="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
+        </div>
+
+        <!-- Related Posts -->
+        <RelatedPosts posts={relatedPosts} />
+      </aside>
+    </div>
+  </main>
+</BaseLayout>

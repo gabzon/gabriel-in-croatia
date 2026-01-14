@@ -1,0 +1,65 @@
+---
+import { siteConfig } from '../config/site';
+---
+
+<nav class="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <a href="/" class="flex items-center gap-2">
+        <span class="text-2xl font-extrabold tracking-tighter text-primary italic">GABRIEL</span>
+        <span class="text-2xl font-light tracking-tighter text-gray-400">IN CROATIA</span>
+      </a>
+
+      <div class="hidden md:flex items-center space-x-8 font-medium">
+        {siteConfig.nav.map((item) => (
+          <a href={item.href} class="hover:text-primary transition-colors">
+            {item.label}
+          </a>
+        ))}
+        <a
+          href="/blog"
+          class="bg-primary text-white px-5 py-2 rounded-full hover:bg-primary-hover hover:shadow-lg transition-all text-sm font-bold"
+        >
+          Start Reading
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button
+        class="md:hidden p-2 rounded-lg hover:bg-border transition-colors"
+        id="mobile-menu-btn"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="hidden md:hidden border-t border-border" id="mobile-menu">
+    <div class="px-4 py-4 space-y-3">
+      {siteConfig.nav.map((item) => (
+        <a href={item.href} class="block py-2 hover:text-primary transition-colors font-medium">
+          {item.label}
+        </a>
+      ))}
+      <a
+        href="/blog"
+        class="block bg-primary text-white px-5 py-3 rounded-xl text-center font-bold mt-4"
+      >
+        Start Reading
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>
