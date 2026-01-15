@@ -15,11 +15,12 @@ export const siteConfig = {
     quoteAttribution: '— Zadar, October 2021',
   },
   // Current status - update these whenever you want!
+  // Use enum keys from temperatureConfig and socialBatteryConfig below
   status: {
     mood: 'Trying to find cilantro',
-    confusionLevel: 92, // percentage
-    temperature: 'Too Cold (Bura is real)',
-    socialBattery: 'Trying to be Slavic',
+    confusionLevel: 92, // percentage (1-100)
+    temperature: 'too-cold' as const,
+    socialBattery: 'medium' as const,
     location: {
       city: 'Split',
       region: 'Dalmatian Coast',
@@ -84,3 +85,28 @@ export const regionConfig = {
 } as const;
 
 export type RegionKey = keyof typeof regionConfig;
+
+// Temperature configuration for status card
+export const temperatureConfig = {
+  freezing: 'Bura has entered the chat',
+  'too-cold': 'Time for rakija therapy',
+  cold: 'Jacket weather, finally',
+  taman: 'The one day a year this happens',
+  hot: 'Ice cream for breakfast is acceptable',
+  'too-hot': 'Even the sea is sweating',
+  burning: 'Hell borrowed our weather',
+} as const;
+
+export type TemperatureKey = keyof typeof temperatureConfig;
+
+// Social battery configuration for status card
+export const socialBatteryConfig = {
+  full: 'Ready to kiss strangers on both cheeks',
+  high: 'Can handle 3 coffee invitations',
+  medium: "One 'ajmo na kavu' is my limit",
+  low: "Pretending I don't speak Croatian",
+  empty: 'Gone full Slavic introvert mode',
+  negative: 'Might fake a phone call to escape',
+} as const;
+
+export type SocialBatteryKey = keyof typeof socialBatteryConfig;

@@ -6,7 +6,7 @@ import BaseLayout from './BaseLayout.astro';
 import CategoryBadge from '../components/CategoryBadge.astro';
 import ConfusionRating from '../components/ConfusionRating.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
-import { siteConfig, categoryConfig, regionConfig } from '../config/site';
+import { siteConfig, categoryConfig, regionConfig, temperatureConfig, socialBatteryConfig } from '../config/site';
 import { ChevronRight, Thermometer, Battery, MapPin } from 'lucide-astro';
 import { authorAvatar } from '../images';
 
@@ -14,7 +14,23 @@ type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, caption, category, confusionLevel, slug, location, region } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  caption,
+  category,
+  confusionLevel,
+  slug,
+  location,
+  region,
+  // Status card overrides
+  statusConfusionLevel,
+  statusTemperature,
+  statusSocialBattery,
+} = Astro.props;
 
 // Calculate reading time
 const wordCount = Astro.slots.has('default') ? 1000 : 500; // Estimate
@@ -27,6 +43,15 @@ const relatedPosts = allPosts
   .slice(0, 3);
 
 const { status } = siteConfig;
+
+// Resolve status values (use frontmatter overrides if provided, otherwise defaults)
+const resolvedConfusionLevel = statusConfusionLevel ?? status.confusionLevel;
+const temperatureKey = statusTemperature ?? status.temperature;
+const socialBatteryKey = statusSocialBattery ?? status.socialBattery;
+
+// Get descriptions from config
+const temperatureDisplay = temperatureConfig[temperatureKey];
+const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
 ---
 
 <BaseLayout title={title} description={description} heroImage={heroImage}>
@@ -121,10 +146,10 @@ const { status } = siteConfig;
             <div>
               <div class="flex justify-between text-sm font-bold mb-2">
                 <span>Confusion Level</span>
-                <span class="text-primary">{status.confusionLevel}%</span>
+                <span class="text-primary">{resolvedConfusionLevel}%</span>
               </div>
               <div class="w-full bg-border h-2 rounded-full overflow-hidden">
-                <div class="bg-primary h-full rounded-full" style={`width: ${status.confusionLevel}%`}></div>
+                <div class="bg-primary h-full rounded-full" style={`width: ${resolvedConfusionLevel}%`}></div>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -133,7 +158,7 @@ const { status } = siteConfig;
               </div>
               <div>
                 <p class="text-xs font-bold text-gray-400">Temperature</p>
-                <p class="text-sm font-bold">{status.temperature}</p>
+                <p class="text-sm font-bold">{temperatureDisplay}</p>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -142,7 +167,7 @@ const { status } = siteConfig;
               </div>
               <div>
                 <p class="text-xs font-bold text-gray-400">Social Battery</p>
-                <p class="text-sm font-bold">{status.socialBattery}</p>
+                <p class="text-sm font-bold">{socialBatteryDisplay}</p>
               </div>
             </div>
           </div>

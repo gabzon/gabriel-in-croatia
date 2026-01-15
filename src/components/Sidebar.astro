@@ -1,16 +1,37 @@
 ---
 import { Image } from 'astro:assets';
-import { siteConfig } from '../config/site';
+import { siteConfig, temperatureConfig, socialBatteryConfig } from '../config/site';
+import type { TemperatureKey, SocialBatteryKey } from '../config/site';
 import { Thermometer, Battery, MapPin } from 'lucide-astro';
 import { authorAvatar } from '../images';
 
 interface Props {
   showStatus?: boolean;
   showNewsletter?: boolean;
+  // Status overrides from blog post frontmatter
+  statusConfusionLevel?: number;
+  statusTemperature?: TemperatureKey;
+  statusSocialBattery?: SocialBatteryKey;
 }
 
-const { showStatus = true, showNewsletter = true } = Astro.props;
+const {
+  showStatus = true,
+  showNewsletter = true,
+  statusConfusionLevel,
+  statusTemperature,
+  statusSocialBattery,
+} = Astro.props;
+
 const { author, status } = siteConfig;
+
+// Resolve status values (use overrides if provided, otherwise defaults)
+const confusionLevel = statusConfusionLevel ?? status.confusionLevel;
+const temperatureKey = statusTemperature ?? status.temperature;
+const socialBatteryKey = statusSocialBattery ?? status.socialBattery;
+
+// Get descriptions from config
+const temperatureDisplay = temperatureConfig[temperatureKey];
+const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
 ---
 
 <aside class="space-y-8">
@@ -78,12 +99,12 @@ const { author, status } = siteConfig;
         <div>
           <div class="flex justify-between text-sm font-bold mb-2">
             <span>Confusion Level</span>
-            <span class="text-primary">{status.confusionLevel}%</span>
+            <span class="text-primary">{confusionLevel}%</span>
           </div>
           <div class="w-full bg-border h-2 rounded-full overflow-hidden">
             <div
               class="bg-primary h-full rounded-full transition-all"
-              style={`width: ${status.confusionLevel}%`}
+              style={`width: ${confusionLevel}%`}
             ></div>
           </div>
         </div>
@@ -95,7 +116,7 @@ const { author, status } = siteConfig;
           </div>
           <div>
             <p class="text-xs font-bold text-gray-400">Temperature</p>
-            <p class="text-sm font-bold">{status.temperature}</p>
+            <p class="text-sm font-bold">{temperatureDisplay}</p>
           </div>
         </div>
 
@@ -106,7 +127,7 @@ const { author, status } = siteConfig;
           </div>
           <div>
             <p class="text-xs font-bold text-gray-400">Social Battery</p>
-            <p class="text-sm font-bold">{status.socialBattery}</p>
+            <p class="text-sm font-bold">{socialBatteryDisplay}</p>
           </div>
         </div>
       </div>

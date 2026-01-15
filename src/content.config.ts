@@ -17,6 +17,25 @@ const regionEnum = z.enum([
   'lika',
 ]);
 
+const temperatureEnum = z.enum([
+  'freezing',
+  'too-cold',
+  'cold',
+  'taman',
+  'hot',
+  'too-hot',
+  'burning',
+]);
+
+const socialBatteryEnum = z.enum([
+  'full',
+  'high',
+  'medium',
+  'low',
+  'empty',
+  'negative',
+]);
+
 const blog = defineCollection({
   type: 'content',
   schema: z.object({
@@ -32,10 +51,16 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     location: z.string().default('Zagreb'),
     region: regionEnum.default('continental'),
+    // Status card overrides (optional - defaults come from site.ts)
+    statusConfusionLevel: z.number().min(1).max(100).optional(),
+    statusTemperature: temperatureEnum.optional(),
+    statusSocialBattery: socialBatteryEnum.optional(),
   }),
 });
 
 export type Category = z.infer<typeof categoryEnum>;
 export type Region = z.infer<typeof regionEnum>;
+export type Temperature = z.infer<typeof temperatureEnum>;
+export type SocialBattery = z.infer<typeof socialBatteryEnum>;
 
 export const collections = { blog };
