@@ -12,7 +12,7 @@ export const siteConfig = {
   // Hero section - change these to update the homepage hero
   hero: {
     quote: '"Wait, so \'Pomalo\' means everything and nothing at the same time?"',
-    quoteAttribution: '— Split, October 2023',
+    quoteAttribution: '— Zadar, October 2021',
   },
   // Current status - update these whenever you want!
   status: {
@@ -71,3 +71,16 @@ export const categoryConfig = {
 } as const;
 
 export type CategoryKey = keyof typeof categoryConfig;
+
+// Region configuration for location card descriptions
+export const regionConfig = {
+  dalmatia: "Where 'pomalo' is a lifestyle",
+  dubrovnik: 'Game of Thrones tour groups and €10 coffees',
+  istria: 'Basically Italy, but Croatian',
+  slavonia: 'Flat lands, big hearts, bigger portions',
+  continental: 'Where people almost show up on time',
+  kvarner: "The Riviera tourists haven't ruined yet",
+  lika: 'Bears, lakes, and zero phone signal',
+} as const;
+
+export type RegionKey = keyof typeof regionConfig;

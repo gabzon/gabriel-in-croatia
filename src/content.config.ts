@@ -7,6 +7,16 @@ const categoryEnum = z.enum([
   'hidden-stories',
 ]);
 
+const regionEnum = z.enum([
+  'dalmatia',
+  'dubrovnik',
+  'istria',
+  'slavonia',
+  'continental',
+  'kvarner',
+  'lika',
+]);
+
 const blog = defineCollection({
   type: 'content',
   schema: z.object({
@@ -20,9 +30,12 @@ const blog = defineCollection({
     category: categoryEnum,
     confusionLevel: z.number().min(1).max(5),
     draft: z.boolean().default(false),
+    location: z.string().default('Zagreb'),
+    region: regionEnum.default('continental'),
   }),
 });
 
 export type Category = z.infer<typeof categoryEnum>;
+export type Region = z.infer<typeof regionEnum>;
 
 export const collections = { blog };

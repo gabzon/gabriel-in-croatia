@@ -6,7 +6,7 @@ import BaseLayout from './BaseLayout.astro';
 import CategoryBadge from '../components/CategoryBadge.astro';
 import ConfusionRating from '../components/ConfusionRating.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
-import { siteConfig, categoryConfig } from '../config/site';
+import { siteConfig, categoryConfig, regionConfig } from '../config/site';
 import { ChevronRight, Thermometer, Battery, MapPin } from 'lucide-astro';
 import { authorAvatar } from '../images';
 
@@ -14,7 +14,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, caption, category, confusionLevel, slug } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, caption, category, confusionLevel, slug, location, region } = Astro.props;
 
 // Calculate reading time
 const wordCount = Astro.slots.has('default') ? 1000 : 500; // Estimate
@@ -154,11 +154,11 @@ const { status } = siteConfig;
             <h5 class="font-extrabold text-xs uppercase tracking-widest text-white/70 mb-4">
               Location
             </h5>
-            <p class="text-2xl font-serif font-bold">{status.location.city}, {status.location.country}</p>
-            <p class="text-sm text-white/80 mt-1">{status.location.region}</p>
+            <p class="text-2xl font-serif font-bold">{location}, {status.location.country}</p>
+            <p class="text-sm text-white/80 mt-1">{regionConfig[region]}</p>
             <div class="mt-6 flex items-center gap-2">
               <MapPin class="w-4 h-4" />
-              <span class="text-xs font-bold">Open in Maps</span>
+              <span class="text-xs font-bold">GPS can't help me here</span>
             </div>
           </div>
           <MapPin class="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
