@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { categoryConfig } from '../config/site';
 
 interface Props {
@@ -19,10 +20,23 @@ const { posts } = Astro.props;
         <a href={`/blog/${post.slug}`} class="group block">
           <div class="flex gap-4">
             {post.data.heroImage && (
-              <div
-                class="w-16 h-16 rounded-lg bg-cover bg-center shrink-0"
-                style={`background-image: url('${post.data.heroImage}')`}
-              />
+              <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                {typeof post.data.heroImage === 'string' ? (
+                  <img
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    width={64}
+                    height={64}
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
             )}
             <div>
               <p class={`text-xs font-bold uppercase ${categoryConfig[post.data.category].textColor}`}>

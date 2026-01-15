@@ -38,12 +38,12 @@ const socialBatteryEnum = z.enum([
 
 const blog = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    heroImage: z.string().optional(),
+    heroImage: image().optional(),
     caption: z.string().optional(), // Handwritten caption for hero image
     tags: z.array(z.string()).default([]),
     category: categoryEnum,
