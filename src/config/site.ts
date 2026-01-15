@@ -48,19 +48,19 @@ export const categoryConfig = {
     textColor: 'text-primary',
     icon: 'ArrowLeftRight',
   },
-  'adventure': {
-    label: 'Adventure Diaries',
-    color: 'blue-500',
-    bgColor: 'bg-blue-500/10',
-    textColor: 'text-blue-500',
-    icon: 'Compass',
-  },
   'language': {
     label: 'Language Struggle',
     color: 'yellow-500',
     bgColor: 'bg-yellow-500/10',
     textColor: 'text-yellow-500',
     icon: 'Languages',
+  },
+  'adventure': {
+    label: 'Adventure Diaries',
+    color: 'blue-500',
+    bgColor: 'bg-blue-500/10',
+    textColor: 'text-blue-500',
+    icon: 'Compass',
   },
   'hidden-stories': {
     label: 'Hidden Stories',
