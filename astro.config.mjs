@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 import react from '@astrojs/react';
 
@@ -17,5 +17,12 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  adapter: cloudflare()
+  adapter: cloudflare(),
+
+  env: {
+    schema: {
+      CONVERTKIT_API_KEY: envField.string({ context: 'server', access: 'secret' }),
+      CONVERTKIT_FORM_ID: envField.string({ context: 'server', access: 'secret' }),
+    }
+  }
 });

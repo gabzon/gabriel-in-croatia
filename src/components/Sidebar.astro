@@ -4,6 +4,7 @@ import { siteConfig, temperatureConfig, socialBatteryConfig } from '../config/si
 import type { TemperatureKey, SocialBatteryKey } from '../config/site';
 import { Thermometer, Battery, MapPin } from 'lucide-astro';
 import { authorAvatar } from '../images';
+import { NewsletterForm } from './NewsletterForm';
 
 interface Props {
   showStatus?: boolean;
@@ -71,19 +72,7 @@ const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
         <p class="text-sm text-white/80 mb-4">
           Weekly updates on my latest cultural fails, straight to your inbox.
         </p>
-        <form class="space-y-3">
-          <input
-            type="email"
-            placeholder="Your email..."
-            class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 placeholder:text-white/70 text-white focus:ring-white focus:border-white transition-all outline-none"
-          />
-          <button
-            type="submit"
-            class="w-full bg-white text-primary font-extrabold py-3 rounded-lg hover:bg-gray-50 transition-colors uppercase text-sm tracking-wider"
-          >
-            Let's Get Confused
-          </button>
-        </form>
+<NewsletterForm variant="sidebar" client:load />
       </div>
     )}
   </div>
