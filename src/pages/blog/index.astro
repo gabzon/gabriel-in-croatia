@@ -2,20 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import CategoryBadge from '../../components/CategoryBadge.astro';
 import { categoryConfig } from '../../config/site';
 
-// Get category from URL query
-const url = new URL(Astro.request.url);
-const categoryFilter = url.searchParams.get('category');
-
-const allPosts = (await getCollection('blog'))
+const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const posts = categoryFilter
-  ? allPosts.filter((post) => post.data.category === categoryFilter)
-  : allPosts;
 
 const categories = Object.keys(categoryConfig) as (keyof typeof categoryConfig)[];
 ---
@@ -23,13 +14,9 @@ const categories = Object.keys(categoryConfig) as (keyof typeof categoryConfig)[
 <BaseLayout title="Blog" description="All stories from Gabriel in Croatia">
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <header class="mb-12">
-      <h1 class="text-4xl font-extrabold mb-4">
-        {categoryFilter ? categoryConfig[categoryFilter as keyof typeof categoryConfig]?.label || 'Stories' : 'All Stories'}
-      </h1>
+      <h1 class="text-4xl font-extrabold mb-4">All Stories</h1>
       <p class="text-gray-600 text-lg">
-        {categoryFilter
-          ? `Exploring the ${categoryConfig[categoryFilter as keyof typeof categoryConfig]?.label.toLowerCase()} aspect of life in Croatia.`
-          : 'Tales of cultural confusion, language struggles, and Mediterranean adventures.'}
+        Tales of cultural confusion, language struggles, and Mediterranean adventures.
       </p>
     </header>
 
@@ -37,22 +24,14 @@ const categories = Object.keys(categoryConfig) as (keyof typeof categoryConfig)[
     <div class="flex flex-wrap gap-3 mb-12">
       <a
         href="/blog"
-        class={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
-          !categoryFilter
-            ? 'bg-primary text-white'
-            : 'bg-border text-text hover:bg-primary/10'
-        }`}
+        class="px-4 py-2 rounded-full text-sm font-bold transition-colors bg-primary text-white"
       >
         All
       </a>
       {categories.map((cat) => (
         <a
-          href={`/blog?category=${cat}`}
-          class={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
-            categoryFilter === cat
-              ? 'bg-primary text-white'
-              : `${categoryConfig[cat].bgColor} ${categoryConfig[cat].textColor} hover:opacity-80`
-          }`}
+          href={`/blog/category/${cat}`}
+          class={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${categoryConfig[cat].bgColor} ${categoryConfig[cat].textColor} hover:opacity-80`}
         >
           {categoryConfig[cat].label}
         </a>
@@ -68,11 +47,17 @@ const categories = Object.keys(categoryConfig) as (keyof typeof categoryConfig)[
       </div>
     ) : (
       <div class="text-center py-20">
-        <p class="text-gray-500 text-lg">No posts found in this category yet.</p>
-        <a href="/blog" class="text-primary font-bold mt-4 inline-block hover:underline">
-          View all posts →
-        </a>
+        <p class="text-gray-500 text-lg">No posts found yet.</p>
       </div>
     )}
   </main>
+
+  <!-- Backwards compatibility: redirect legacy ?category=xxx URLs -->
+  <script>
+    const url = new URL(window.location.href);
+    const category = url.searchParams.get('category');
+    if (category) {
+      window.location.replace(`/blog/category/${category}`);
+    }
+  </script>
 </BaseLayout>
