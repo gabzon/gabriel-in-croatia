@@ -22,7 +22,6 @@ export default defineConfig({
   env: {
     schema: {
       CONVERTKIT_API_KEY: envField.string({ context: 'server', access: 'secret' }),
-      CONVERTKIT_FORM_ID: envField.string({ context: 'server', access: 'secret' }),
     }
   }
 });

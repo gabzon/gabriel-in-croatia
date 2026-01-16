@@ -1,15 +1,12 @@
 import type { APIRoute } from 'astro';
-import { CONVERTKIT_API_KEY, CONVERTKIT_FORM_ID } from 'astro:env/server';
+import { CONVERTKIT_API_KEY } from 'astro:env/server';
 
-// Ensure this runs as a server function, not prerendered
 export const prerender = false;
 
 export const POST: APIRoute = async ({ url }) => {
   try {
-    // Get email from URL params (workaround for Cloudflare adapter dev mode)
     const email = url.searchParams.get('email');
 
-    // Validate email
     if (!email || typeof email !== 'string') {
       return new Response(
         JSON.stringify({ error: 'Email is required' }),
@@ -25,8 +22,8 @@ export const POST: APIRoute = async ({ url }) => {
       );
     }
 
-    if (!CONVERTKIT_API_KEY || !CONVERTKIT_FORM_ID) {
-      console.error('ConvertKit configuration missing');
+    if (!CONVERTKIT_API_KEY) {
+      console.error('CONVERTKIT_API_KEY not configured');
       return new Response(
         JSON.stringify({ error: 'Newsletter service not configured' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
