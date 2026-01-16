@@ -33,15 +33,17 @@ export const POST: APIRoute = async ({ url }) => {
       );
     }
 
-    // Subscribe to ConvertKit
+    // Subscribe to Kit (ConvertKit) using V4 API
     const response = await fetch(
-      `https://api.convertkit.com/v3/forms/${CONVERTKIT_FORM_ID}/subscribe`,
+      'https://api.kit.com/v4/subscribers',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Kit-Api-Key': CONVERTKIT_API_KEY,
+        },
         body: JSON.stringify({
-          api_key: CONVERTKIT_API_KEY,
-          email,
+          email_address: email,
         }),
       }
     );
