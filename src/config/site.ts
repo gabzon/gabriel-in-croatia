@@ -33,9 +33,9 @@ export const siteConfig = {
     youtube: 'https://www.youtube.com/@GabrielinCroatia',
   },
   nav: [
-    { label: 'Stories', href: '/blog' },
-    { label: 'The Struggle', href: '/blog/category/latino-vs-slavic' },
-    { label: 'Maps', href: '#' },
+    { label: 'The Struggle', href: '/blog' },
+    { label: 'Guides', href: '/guides' },
+    { label: 'Weekly', href: '/weekly' },
   ],
 };
 
@@ -114,3 +114,79 @@ export const socialBatteryConfig = {
 } as const;
 
 export type SocialBatteryKey = keyof typeof socialBatteryConfig;
+
+// Guide type configuration for guides collection
+export const guideTypeConfig = {
+  food: {
+    label: 'Food & Restaurants',
+    color: 'orange-500',
+    bgColor: 'bg-orange-500/10',
+    activeBgColor: 'bg-orange-500',
+    textColor: 'text-orange-500',
+    icon: 'UtensilsCrossed',
+  },
+  drinks: {
+    label: 'Cafes & Bars',
+    color: 'amber-500',
+    bgColor: 'bg-amber-500/10',
+    activeBgColor: 'bg-amber-500',
+    textColor: 'text-amber-500',
+    icon: 'Coffee',
+  },
+  activities: {
+    label: 'Things to Do',
+    color: 'violet-500',
+    bgColor: 'bg-violet-500/10',
+    activeBgColor: 'bg-violet-500',
+    textColor: 'text-violet-500',
+    icon: 'Sparkles',
+  },
+  seasonal: {
+    label: 'Seasonal',
+    color: 'cyan-500',
+    bgColor: 'bg-cyan-500/10',
+    activeBgColor: 'bg-cyan-500',
+    textColor: 'text-cyan-500',
+    icon: 'Sun',
+  },
+  neighborhoods: {
+    label: 'Neighborhoods',
+    color: 'rose-500',
+    bgColor: 'bg-rose-500/10',
+    activeBgColor: 'bg-rose-500',
+    textColor: 'text-rose-500',
+    icon: 'MapPin',
+  },
+} as const;
+
+export type GuideTypeKey = keyof typeof guideTypeConfig;
+
+// Price range configuration for guides
+export const priceRangeConfig = {
+  budget: {
+    label: 'Budget Friendly',
+    description: "Won't break the bank",
+    color: 'emerald-500',
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-500',
+    icon: 'Wallet',
+  },
+  moderate: {
+    label: 'Mid-Range',
+    description: 'A fair deal',
+    color: 'amber-500',
+    bgColor: 'bg-amber-500/10',
+    textColor: 'text-amber-500',
+    icon: 'CreditCard',
+  },
+  luxury: {
+    label: 'Luxury',
+    description: 'I feel like a Kardashian',
+    color: 'red-500',
+    bgColor: 'bg-red-500/10',
+    textColor: 'text-red-500',
+    icon: 'Gem',
+  },
+} as const;
+
+export type PriceRangeKey = keyof typeof priceRangeConfig;

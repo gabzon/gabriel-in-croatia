@@ -1,0 +1,82 @@
+---
+import { guideTypeConfig, priceRangeConfig, regionConfig, type GuideTypeKey, type PriceRangeKey, type RegionKey } from '../config/site';
+import { MapPin, Wallet, CreditCard, Gem, UtensilsCrossed, Coffee, Sparkles, Sun } from 'lucide-astro';
+import type { PriceRange, GuideType, Region } from '../content.config';
+
+interface Props {
+  guideType: GuideType;
+  priceRange?: PriceRange;
+  location: string;
+  neighborhood?: string;
+  region: Region;
+}
+
+const { guideType, priceRange, location, neighborhood, region } = Astro.props;
+
+const guideConfig = guideTypeConfig[guideType as GuideTypeKey];
+const priceConfig = priceRange ? priceRangeConfig[priceRange as PriceRangeKey] : null;
+const regionDescription = regionConfig[region as RegionKey];
+
+// Map icon names to components
+const priceIcons = {
+  Wallet,
+  CreditCard,
+  Gem,
+};
+
+const PriceIcon = priceConfig ? priceIcons[priceConfig.icon as keyof typeof priceIcons] : null;
+---
+
+<aside class="w-full lg:w-80 space-y-8">
+  {/* Price Range Widget */}
+  {priceConfig && PriceIcon && (
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-border">
+      <h5 class="font-extrabold text-xs uppercase tracking-widest text-gray-400 mb-4">
+        Price Range
+      </h5>
+      <div class="flex items-center gap-3">
+        <div class={`w-12 h-12 rounded-full ${priceConfig.bgColor} flex items-center justify-center ${priceConfig.textColor}`}>
+          <PriceIcon class="w-6 h-6" />
+        </div>
+        <div>
+          <p class="font-bold">{priceConfig.label}</p>
+          <p class="text-sm text-gray-500">{priceConfig.description}</p>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* Location Widget */}
+  <div class="bg-teal text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+    <div class="relative z-10">
+      <h5 class="font-extrabold text-xs uppercase tracking-widest text-white/70 mb-4">
+        Location
+      </h5>
+      <p class="text-2xl font-serif font-bold">{location}, Croatia</p>
+      {neighborhood && (
+        <p class="text-sm text-white/90 mt-1 font-medium">{neighborhood}</p>
+      )}
+      <p class="text-sm text-white/80 mt-1">{regionDescription}</p>
+      <div class="mt-6 flex items-center gap-2">
+        <MapPin class="w-4 h-4" />
+        <span class="text-xs font-bold">Local insider tips</span>
+      </div>
+    </div>
+    <MapPin class="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
+  </div>
+
+  {/* Guide Type Widget */}
+  <div class="bg-white p-6 rounded-2xl shadow-sm border border-border">
+    <h5 class="font-extrabold text-xs uppercase tracking-widest text-gray-400 mb-4">
+      Guide Type
+    </h5>
+    <div class={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${guideConfig.bgColor} ${guideConfig.textColor}`}>
+      {guideType === 'food' && <UtensilsCrossed class="w-4 h-4" />}
+      {guideType === 'drinks' && <Coffee class="w-4 h-4" />}
+      {guideType === 'activities' && <Sparkles class="w-4 h-4" />}
+      {guideType === 'seasonal' && <Sun class="w-4 h-4" />}
+      {guideType === 'neighborhoods' && <MapPin class="w-4 h-4" />}
+      <span class="font-bold text-sm">{guideConfig.label}</span>
+    </div>
+  </div>
+</aside>

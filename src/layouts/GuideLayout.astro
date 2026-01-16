@@ -1,0 +1,130 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import GuideTypeBadge from '../components/GuideTypeBadge.astro';
+import GuideSidebar from '../components/GuideSidebar.astro';
+import { siteConfig, guideTypeConfig } from '../config/site';
+import { ChevronRight } from 'lucide-astro';
+import { authorAvatar } from '../images';
+
+type Props = CollectionEntry<'guides'>['data'] & {
+  slug: string;
+};
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  caption,
+  guideType,
+  priceRange,
+  neighborhood,
+  location,
+  region,
+  slug,
+} = Astro.props;
+
+// Calculate reading time
+const wordCount = Astro.slots.has('default') ? 1000 : 500;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+---
+
+<BaseLayout title={title} description={description} heroImage={heroImage}>
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8 md:py-12">
+    {/* Breadcrumbs */}
+    <nav class="flex flex-wrap items-center gap-2 mb-8">
+      <a href="/" class="text-text-muted text-sm font-medium hover:text-primary">Home</a>
+      <ChevronRight class="w-4 h-4 text-text-muted" />
+      <a href="/guides" class="text-text-muted text-sm font-medium hover:text-primary">Guides</a>
+      <ChevronRight class="w-4 h-4 text-text-muted" />
+      <a href={`/guides/type/${guideType}`} class="text-text-muted text-sm font-medium hover:text-primary">
+        {guideTypeConfig[guideType].label}
+      </a>
+      <ChevronRight class="w-4 h-4 text-text-muted" />
+      <span class="text-text text-sm font-bold truncate max-w-[200px]">{title}</span>
+    </nav>
+
+    {/* Post Header */}
+    <header class="mb-10">
+      <div class="flex items-center gap-2 mb-6">
+        <GuideTypeBadge guideType={guideType} size="md" />
+        <span class="text-text-muted text-sm">• {readingTime} min read</span>
+        <span class="text-text-muted text-sm">• {location}</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-serif font-black leading-tight tracking-tight mb-6">
+        {title}
+      </h1>
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary bg-gray-200">
+          <Image
+            src={authorAvatar}
+            alt={siteConfig.author.name}
+            width={48}
+            height={48}
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p class="font-bold">{siteConfig.author.name}</p>
+          <p class="text-text-muted text-sm">
+            Published on {pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {updatedDate && (
+              <span> • Updated {updatedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            )}
+          </p>
+        </div>
+      </div>
+    </header>
+
+    {/* Hero Image */}
+    {heroImage && (
+      <div class="mb-16">
+        <div class="relative group">
+          <div class="w-full rounded-xl overflow-hidden shadow-2xl">
+            {typeof heroImage === 'string' ? (
+              <img
+                src={heroImage}
+                alt={title}
+                class="w-full h-auto min-h-[300px] max-h-[500px] object-cover"
+              />
+            ) : (
+              <Image
+                src={heroImage}
+                alt={title}
+                class="w-full h-auto min-h-[300px] max-h-[500px] object-cover"
+                widths={[400, 800, 1200]}
+                sizes="(max-width: 768px) 100vw, 1200px"
+              />
+            )}
+          </div>
+          {caption && (
+            <div class="absolute -bottom-6 -right-2 md:right-8 bg-white p-4 shadow-xl rounded-lg border-l-4 border-primary max-w-xs rotate-2">
+              <p class="handwritten text-sm">{caption}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <div class="flex flex-col lg:flex-row gap-12">
+      {/* Content */}
+      <article class="flex-1 max-w-3xl">
+        <div class="prose prose-lg max-w-none">
+          <slot />
+        </div>
+      </article>
+
+      {/* Sidebar */}
+      <GuideSidebar
+        guideType={guideType}
+        priceRange={priceRange}
+        location={location}
+        neighborhood={neighborhood}
+        region={region}
+      />
+    </div>
+  </main>
+</BaseLayout>

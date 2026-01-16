@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuideCard from '../../components/GuideCard.astro';
+import { guideTypeConfig } from '../../config/site';
+
+const guides = (await getCollection('guides'))
+  .filter((guide) => !guide.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const guideTypes = Object.keys(guideTypeConfig) as (keyof typeof guideTypeConfig)[];
+---
+
+<BaseLayout title="Guides" description="Local recommendations and tips for living in Croatia">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-12">
+      <h1 class="text-4xl font-extrabold mb-4">Guides</h1>
+      <p class="text-gray-600 text-lg">
+        Local recommendations, tips, and insider knowledge for making the most of Croatia.
+      </p>
+    </header>
+
+    {/* Type Filter */}
+    <div class="flex flex-wrap gap-3 mb-12">
+      <a
+        href="/guides"
+        class="px-4 py-2 rounded-full text-sm font-bold transition-colors bg-primary text-white"
+      >
+        All
+      </a>
+      {guideTypes.map((type) => (
+        <a
+          href={`/guides/type/${type}`}
+          class={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${guideTypeConfig[type].bgColor} ${guideTypeConfig[type].textColor} hover:opacity-80`}
+        >
+          {guideTypeConfig[type].label}
+        </a>
+      ))}
+    </div>
+
+    {/* Guides Grid */}
+    {guides.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {guides.map((guide) => (
+          <GuideCard guide={guide} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-gray-500 text-lg">No guides found yet. Check back soon!</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

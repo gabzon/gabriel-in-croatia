@@ -1,0 +1,21 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import WeeklyLayout from '../../layouts/WeeklyLayout.astro';
+
+export async function getStaticPaths() {
+  const weeklies = await getCollection('weekly');
+  return weeklies.map((weekly) => ({
+    params: { slug: weekly.slug },
+    props: weekly,
+  }));
+}
+
+type Props = CollectionEntry<'weekly'>;
+
+const weekly = Astro.props;
+const { Content } = await weekly.render();
+---
+
+<WeeklyLayout {...weekly.data} slug={weekly.slug}>
+  <Content />
+</WeeklyLayout>

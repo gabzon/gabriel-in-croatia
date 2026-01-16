@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import GuideCard from '../../../components/GuideCard.astro';
+import { guideTypeConfig, type GuideTypeKey } from '../../../config/site';
+
+export async function getStaticPaths() {
+  const guideTypes = Object.keys(guideTypeConfig) as GuideTypeKey[];
+  return guideTypes.map((type) => ({
+    params: { type },
+    props: { type },
+  }));
+}
+
+interface Props {
+  type: GuideTypeKey;
+}
+
+const { type } = Astro.props;
+const typeConfig = guideTypeConfig[type];
+
+const guides = (await getCollection('guides'))
+  .filter((guide) => !guide.data.draft && guide.data.guideType === type)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const guideTypes = Object.keys(guideTypeConfig) as GuideTypeKey[];
+---
+
+<BaseLayout title={`${typeConfig.label} Guides`} description={`${typeConfig.label} recommendations and tips for Croatia`}>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-12">
+      <h1 class="text-4xl font-extrabold mb-4">{typeConfig.label}</h1>
+      <p class="text-gray-600 text-lg">
+        Browse our {typeConfig.label.toLowerCase()} recommendations and tips.
+      </p>
+    </header>
+
+    {/* Type Filter */}
+    <div class="flex flex-wrap gap-3 mb-12">
+      <a
+        href="/guides"
+        class="px-4 py-2 rounded-full text-sm font-bold transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200"
+      >
+        All
+      </a>
+      {guideTypes.map((t) => (
+        <a
+          href={`/guides/type/${t}`}
+          class={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+            t === type
+              ? `${guideTypeConfig[t].activeBgColor} text-white`
+              : `${guideTypeConfig[t].bgColor} ${guideTypeConfig[t].textColor} hover:opacity-80`
+          }`}
+        >
+          {guideTypeConfig[t].label}
+        </a>
+      ))}
+    </div>
+
+    {/* Guides Grid */}
+    {guides.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {guides.map((guide) => (
+          <GuideCard guide={guide} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-gray-500 text-lg">No {typeConfig.label.toLowerCase()} guides found yet.</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

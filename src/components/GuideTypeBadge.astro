@@ -1,0 +1,19 @@
+---
+import { guideTypeConfig, type GuideTypeKey } from '../config/site';
+
+interface Props {
+  guideType: GuideTypeKey;
+  size?: 'sm' | 'md';
+}
+
+const { guideType, size = 'sm' } = Astro.props;
+const config = guideTypeConfig[guideType];
+
+const sizeClasses = size === 'sm'
+  ? 'px-2 py-0.5 text-[10px]'
+  : 'px-3 py-1 text-xs';
+---
+
+<span class={`${config.bgColor} ${config.textColor} ${sizeClasses} font-bold uppercase tracking-wider rounded-full`}>
+  {config.label}
+</span>

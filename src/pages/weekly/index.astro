@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WeeklyCard from '../../components/WeeklyCard.astro';
+
+const weeklies = (await getCollection('weekly'))
+  .filter((weekly) => !weekly.data.draft)
+  .sort((a, b) => b.data.weekStart.valueOf() - a.data.weekStart.valueOf());
+---
+
+<BaseLayout title="Weekly" description="Weekly event roundups and what's happening in Croatia">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-12">
+      <h1 class="text-4xl font-extrabold mb-4">Weekly Roundups</h1>
+      <p class="text-gray-600 text-lg">
+        What's happening this week - events, concerts, food festivals, and more.
+      </p>
+    </header>
+
+    {/* Weekly Grid */}
+    {weeklies.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {weeklies.map((weekly) => (
+          <WeeklyCard weekly={weekly} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-gray-500 text-lg">No weekly roundups yet. Check back soon!</p>
+      </div>
+    )}
+  </main>
+</BaseLayout>

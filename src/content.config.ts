@@ -36,6 +36,20 @@ const socialBatteryEnum = z.enum([
   'negative',
 ]);
 
+const guideTypeEnum = z.enum([
+  'food',
+  'drinks',
+  'activities',
+  'seasonal',
+  'neighborhoods',
+]);
+
+const priceRangeEnum = z.enum([
+  'budget',
+  'moderate',
+  'luxury',
+]);
+
 const blog = defineCollection({
   type: 'content',
   schema: ({ image }) => z.object({
@@ -58,9 +72,47 @@ const blog = defineCollection({
   }),
 });
 
+const guides = defineCollection({
+  type: 'content',
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    heroImage: image().optional(),
+    caption: z.string().optional(),
+    guideType: guideTypeEnum,
+    neighborhood: z.string().optional(),
+    priceRange: priceRangeEnum.optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    location: z.string(),
+    region: regionEnum.default('continental'),
+  }),
+});
+
+const weekly = defineCollection({
+  type: 'content',
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string(),
+    weekStart: z.coerce.date(),
+    weekEnd: z.coerce.date(),
+    pubDate: z.coerce.date(),
+    heroImage: image().optional(),
+    caption: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    location: z.string(),
+    region: regionEnum.default('continental'),
+  }),
+});
+
 export type Category = z.infer<typeof categoryEnum>;
 export type Region = z.infer<typeof regionEnum>;
 export type Temperature = z.infer<typeof temperatureEnum>;
 export type SocialBattery = z.infer<typeof socialBatteryEnum>;
+export type GuideType = z.infer<typeof guideTypeEnum>;
+export type PriceRange = z.infer<typeof priceRangeEnum>;
 
-export const collections = { blog };
+export const collections = { blog, guides, weekly };
