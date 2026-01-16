@@ -1,15 +1,14 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Font imports */
-@import "@fontsource/plus-jakarta-sans/300.css";
-@import "@fontsource/plus-jakarta-sans/400.css";
-@import "@fontsource/plus-jakarta-sans/500.css";
-@import "@fontsource/plus-jakarta-sans/600.css";
-@import "@fontsource/plus-jakarta-sans/700.css";
-@import "@fontsource/plus-jakarta-sans/800.css";
-@import "@fontsource/playfair-display/700.css";
-@import "@fontsource/playfair-display/900.css";
+/* Font imports - only weights actually used in the codebase */
+@import "@fontsource/plus-jakarta-sans/300.css"; /* font-light */
+@import "@fontsource/plus-jakarta-sans/400.css"; /* font-normal (default) */
+@import "@fontsource/plus-jakarta-sans/500.css"; /* font-medium */
+@import "@fontsource/plus-jakarta-sans/700.css"; /* font-bold */
+@import "@fontsource/plus-jakarta-sans/800.css"; /* font-extrabold */
+@import "@fontsource/playfair-display/700.css"; /* blockquotes */
+@import "@fontsource/playfair-display/900.css"; /* drop-cap, font-black headings */
 
 /* Design System Theme */
 @theme {
