@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro';
 import { CONVERTKIT_API_KEY, CONVERTKIT_FORM_ID } from 'astro:env/server';
 
+// Ensure this runs as a server function, not prerendered
+export const prerender = false;
+
 export const POST: APIRoute = async ({ url }) => {
   try {
     // Get email from URL params (workaround for Cloudflare adapter dev mode)
