@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import GuideTypeBadge from '../components/GuideTypeBadge.astro';
 import GuideSidebar from '../components/GuideSidebar.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
 import { siteConfig, guideTypeConfig } from '../config/site';
 import { ChevronRight } from 'lucide-astro';
 import { authorAvatar } from '../images';
@@ -30,9 +31,92 @@ const {
 // Calculate reading time
 const wordCount = Astro.slots.has('default') ? 1000 : 500;
 const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+// Canonical URL for this guide
+const canonicalURL = new URL(`/guides/${slug}`, siteConfig.url).href;
+
+// Hero image URL for schema
+const heroImageUrl = heroImage
+  ? typeof heroImage === 'string'
+    ? heroImage
+    : new URL(heroImage.src, siteConfig.url).href
+  : undefined;
+
+// Article schema for guides
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  image: heroImageUrl,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate || pubDate).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: siteConfig.author.name,
+    url: siteConfig.url,
+  },
+  publisher: {
+    '@type': 'Person',
+    name: siteConfig.author.name,
+    url: siteConfig.url,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalURL,
+  },
+  articleSection: guideTypeConfig[guideType].label,
+  wordCount: wordCount,
+};
+
+// BreadcrumbList schema
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteConfig.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Guides',
+      item: `${siteConfig.url}/guides`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: guideTypeConfig[guideType].label,
+      item: `${siteConfig.url}/guides/type/${guideType}`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: title,
+      item: canonicalURL,
+    },
+  ],
+};
 ---
 
-<BaseLayout title={title} description={description} heroImage={heroImage}>
+<BaseLayout
+  title={title}
+  description={description}
+  heroImage={heroImage}
+  article={{
+    publishedTime: pubDate,
+    modifiedTime: updatedDate,
+    author: siteConfig.author.name,
+    section: guideTypeConfig[guideType].label,
+  }}
+>
+  <!-- Structured Data for Guide -->
+  <JsonLd data={articleSchema} />
+  <JsonLd data={breadcrumbSchema} />
+
   <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8 md:py-12">
     {/* Breadcrumbs */}
     <nav class="flex flex-wrap items-center gap-2 mb-8">
@@ -89,6 +173,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
                 src={heroImage}
                 alt={title}
                 class="w-full h-auto min-h-[300px] max-h-[500px] object-cover"
+                loading="eager"
+                fetchpriority="high"
               />
             ) : (
               <Image
@@ -97,6 +183,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
                 class="w-full h-auto min-h-[300px] max-h-[500px] object-cover"
                 widths={[400, 800, 1200]}
                 sizes="(max-width: 768px) 100vw, 1200px"
+                loading="eager"
               />
             )}
           </div>

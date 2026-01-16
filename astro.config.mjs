@@ -9,9 +9,12 @@ import mdx from '@astrojs/mdx';
 
 import cloudflare from '@astrojs/cloudflare';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), mdx()],
+  site: 'https://gabrielincroatia.com',
+  integrations: [react(), mdx(), sitemap()],
 
   vite: {
     plugins: [tailwindcss()]

@@ -1,0 +1,6 @@
+# robots.txt for gabrielincroatia.com
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://gabrielincroatia.com/sitemap-index.xml

@@ -3,8 +3,16 @@
 
 export const siteConfig = {
   name: 'Gabriel in Croatia',
+  url: 'https://gabrielincroatia.com',
   tagline: 'A Venezuelan\'s Guide to Cultural Confusion',
   description: 'I make Croatian culture make sense by not understanding it at all.',
+  // Geo coordinates for Croatia (Split)
+  geo: {
+    latitude: 43.5081,
+    longitude: 16.4402,
+    region: 'HR-17', // Split-Dalmatia County
+    placename: 'Split, Croatia',
+  },
   author: {
     name: 'Gabriel',
     bio: 'I came for the sunshine, stayed because I\'m still trying to figure out how the bus schedule works. This is my attempt at living the Mediterranean life while keeping my Latino soul intact.',
