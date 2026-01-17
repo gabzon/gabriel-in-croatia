@@ -20,7 +20,8 @@ interface Props {
 }
 
 const { title, description = siteConfig.tagline, heroImage, article } = Astro.props;
-const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+// Don't append site name if title already contains it
+const fullTitle = title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
 
 // Canonical URL
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);

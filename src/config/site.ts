@@ -5,13 +5,24 @@ export const siteConfig = {
   name: 'Gabriel in Croatia',
   url: 'https://gabrielincroatia.com',
   tagline: 'A Venezuelan\'s Guide to Cultural Confusion',
-  description: 'I make Croatian culture make sense by not understanding it at all.',
-  // Geo coordinates for Croatia (Split)
+  description: 'A Venezuelan expat\'s honest guide to living in Croatia. Stories about Croatian culture, language struggles, travel tips, and Mediterranean life from Zagreb.',
+  // Geo coordinates for Croatia (Zagreb)
   geo: {
-    latitude: 43.5081,
-    longitude: 16.4402,
-    region: 'HR-17', // Split-Dalmatia County
-    placename: 'Split, Croatia',
+    latitude: 45.8150,
+    longitude: 15.9819,
+    region: 'HR-21', // City of Zagreb
+    placename: 'Zagreb, Croatia',
+  },
+  // SEO-optimized page metadata
+  seo: {
+    home: {
+      title: 'Gabriel in Croatia | Expat Life, Travel Tips & Croatian Culture',
+      description: 'A Venezuelan expat\'s honest guide to living in Croatia. Stories about Croatian culture, language struggles, travel tips, and Mediterranean life from Zagreb.',
+    },
+    blog: {
+      title: 'Blog | Stories from an Expat in Croatia',
+      description: 'Expat stories, Croatian culture explained, language mishaps, and travel adventures. Real experiences from a Venezuelan living in Zagreb, Croatia.',
+    },
   },
   author: {
     name: 'Gabriel',
@@ -30,8 +41,8 @@ export const siteConfig = {
     temperature: 'too-cold' as const,
     socialBattery: 'medium' as const,
     location: {
-      city: 'Split',
-      region: 'Dalmatian Coast',
+      city: 'Zagreb',
+      region: 'Central Croatia',
       country: 'Croatia',
     },
   },

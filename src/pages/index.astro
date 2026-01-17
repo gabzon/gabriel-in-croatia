@@ -17,7 +17,7 @@ const recentPosts = posts.slice(1, 5);
 const categories = Object.keys(categoryConfig) as (keyof typeof categoryConfig)[];
 ---
 
-<BaseLayout title={siteConfig.name}>
+<BaseLayout title={siteConfig.seo.home.title} description={siteConfig.seo.home.description}>
   <!-- Hero Section -->
   <header class="relative overflow-hidden bg-cream py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
