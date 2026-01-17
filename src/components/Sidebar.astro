@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import { siteConfig, temperatureConfig, socialBatteryConfig } from '../config/site';
-import type { TemperatureKey, SocialBatteryKey } from '../config/site';
+import { siteConfig, temperatureConfig, socialBatteryConfig, regionConfig } from '../config/site';
+import type { TemperatureKey, SocialBatteryKey, RegionKey } from '../config/site';
 import { Thermometer, Battery, MapPin } from 'lucide-astro';
 import { authorAvatar } from '../images';
 import { NewsletterForm } from './NewsletterForm';
@@ -13,6 +13,9 @@ interface Props {
   statusConfusionLevel?: number;
   statusTemperature?: TemperatureKey;
   statusSocialBattery?: SocialBatteryKey;
+  // Location overrides
+  location?: string;
+  region?: RegionKey;
 }
 
 const {
@@ -21,6 +24,8 @@ const {
   statusConfusionLevel,
   statusTemperature,
   statusSocialBattery,
+  location,
+  region,
 } = Astro.props;
 
 const { author, status } = siteConfig;
@@ -29,6 +34,10 @@ const { author, status } = siteConfig;
 const confusionLevel = statusConfusionLevel ?? status.confusionLevel;
 const temperatureKey = statusTemperature ?? status.temperature;
 const socialBatteryKey = statusSocialBattery ?? status.socialBattery;
+
+// Resolve location values
+const displayCity = location ?? status.location.city;
+const displayRegion = region ? regionConfig[region] : status.location.region;
 
 // Get descriptions from config
 const temperatureDisplay = temperatureConfig[temperatureKey];
@@ -104,7 +113,7 @@ const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
             <Thermometer class="w-5 h-5" />
           </div>
           <div>
-            <p class="text-xs font-bold text-gray-400">Temperature</p>
+            <p class="text-xs font-bold text-gray-400">Temperature <span class="text-primary font-medium capitalize">{temperatureKey.replace('-', ' ')}</span></p>
             <p class="text-sm font-bold">{temperatureDisplay}</p>
           </div>
         </div>
@@ -115,7 +124,7 @@ const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
             <Battery class="w-5 h-5" />
           </div>
           <div>
-            <p class="text-xs font-bold text-gray-400">Social Battery</p>
+            <p class="text-xs font-bold text-gray-400">Social Battery <span class="text-primary font-medium capitalize">{socialBatteryKey}</span></p>
             <p class="text-sm font-bold">{socialBatteryDisplay}</p>
           </div>
         </div>
@@ -128,11 +137,11 @@ const socialBatteryDisplay = socialBatteryConfig[socialBatteryKey];
         <h5 class="font-extrabold text-xs uppercase tracking-widest text-white/70 mb-4">
           Location
         </h5>
-        <p class="text-2xl font-serif font-bold">{status.location.city}, {status.location.country}</p>
-        <p class="text-sm text-white/80 mt-1">{status.location.region}</p>
+        <p class="text-2xl font-serif font-bold">{displayCity}, {status.location.country}</p>
+        <p class="text-sm text-white/80 mt-1">{displayRegion}</p>
         <div class="mt-6 flex items-center gap-2">
           <MapPin class="w-4 h-4" />
-          <span class="text-xs font-bold">Dalmatian Coast</span>
+          <span class="text-xs font-bold">GPS can't help me here</span>
         </div>
       </div>
       <MapPin class="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />

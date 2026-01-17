@@ -248,7 +248,7 @@ const breadcrumbSchema = {
                 <Thermometer class="w-5 h-5" />
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-400">Temperature</p>
+                <p class="text-xs font-bold text-gray-400">Temperature <span class="text-primary font-medium capitalize">{temperatureKey.replace('-', ' ')}</span></p>
                 <p class="text-sm font-bold">{temperatureDisplay}</p>
               </div>
             </div>
@@ -257,7 +257,7 @@ const breadcrumbSchema = {
                 <Battery class="w-5 h-5" />
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-400">Social Battery</p>
+                <p class="text-xs font-bold text-gray-400">Social Battery <span class="text-primary font-medium capitalize">{socialBatteryKey}</span></p>
                 <p class="text-sm font-bold">{socialBatteryDisplay}</p>
               </div>
             </div>
