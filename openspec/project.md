@@ -37,6 +37,7 @@ Blog posts use the following frontmatter:
 - `title`: Post title
 - `description`: Meta description
 - `pubDate`: Publication date
+- `updatedDate`: (optional) Last update date — used for SEO signals (sitemap `lastmod`, JSON-LD `dateModified`, OG `article:modified_time`)
 - `heroImage`: URL or path to hero image
 - `caption`: Handwritten-style caption for hero image
 - `category`: One of `latino-vs-slavic`, `adventure`, `language`, `hidden-stories`
